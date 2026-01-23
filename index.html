@@ -1486,36 +1486,29 @@
             }
         });
         
-            // Download Button
-     const downloadBtn = document.getElementById('downloadBtn');
-    
-    downloadBtn.addEventListener('click', () => {
-        // Show loading state
-        downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحميل...';
-        downloadBtn.disabled = true;
+        const downloadBtn = document.getElementById('downloadBtn');
         
-        // Create download link with correct URL
-        const link = document.createElement('a');
-        link.href = 'https://www.mediafire.com/file/bpxjh4myixxrv0f/Matric+Nejma+6+V2.0-1.apk/file';
-        link.target = '_blank'; // Open in new tab
-        link.rel = 'noopener noreferrer'; // Security best practice
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link); // Clean up
-        
-        // Reset button after a short delay
-        setTimeout(() => {
-            downloadBtn.innerHTML = '<i class="fas fa-check"></i> تم التحميل بنجاح';
-            downloadBtn.style.background = 'linear-gradient(135deg, #4CAF50, #388E3C)';
+        downloadBtn.addEventListener('click', () => {
+            // Show loading state
+            downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحميل...';
+            downloadBtn.disabled = true;
             
-            // Optional: Reset button back to original state after a few seconds
+            // Open MediaFire link in new tab
+            window.open('https://www.mediafire.com/file/bpxjh4myixxrv0f/Matric+Nejma+6+V2.0-1.apk/file', '_blank');
+            
+            // Reset button after a short delay
             setTimeout(() => {
-                downloadBtn.innerHTML = '<i class="fas fa-download"></i> تحميل'; // Adjust to your original text
-                downloadBtn.style.background = ''; // Reset to original background
-                downloadBtn.disabled = false;
-            }, 3000);
-        }, 500);
-    });
+                downloadBtn.innerHTML = '<i class="fas fa-check"></i> تم التحميل بنجاح';
+                downloadBtn.style.background = 'linear-gradient(135deg, #4CAF50, #388E3C)';
+                
+                // Optional: Reset button back to original state after a few seconds
+                setTimeout(() => {
+                    downloadBtn.innerHTML = '<i class="fas fa-download"></i> تحميل'; // Adjust to your original button text
+                    downloadBtn.style.background = ''; // Reset to original background
+                    downloadBtn.disabled = false;
+                }, 3000);
+            }, 500);
+        });
         
         // Touch event for mobile
         document.addEventListener('touchstart', function() {}, {passive: true});
