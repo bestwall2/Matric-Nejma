@@ -1494,62 +1494,20 @@
             downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحميل...';
             downloadBtn.disabled = true;
             
-            setTimeout(() => {
-                // Create fake download link
-                const link = document.createElement('a');
-                link.href = '#';
-                link.download = 'https://www.mediafire.com/file/bpxjh4myixxrv0f/Matric+Nejma+6+V2.0-1.apk/file';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
+            
+             // Create fake download link
+        
+            const link = document.createElement('a');
+            link.href = '#';
+            link.download = 'https://www.mediafire.com/file/bpxjh4myixxrv0f/Matric+Nejma+6+V2.0-1.apk/file';
+            document.body.appendChild(link);
+            link.click();
+            // Reset button
+            downloadBtn.innerHTML = '<i class="fas fa-check"></i> تم التحميل بنجاح';
+            downloadBtn.style.background = 'linear-gradient(135deg, #4CAF50, #388E3C)';
                 
-                // Reset button
-                downloadBtn.innerHTML = '<i class="fas fa-check"></i> تم التحميل بنجاح';
-                downloadBtn.style.background = 'linear-gradient(135deg, #4CAF50, #388E3C)';
-                
-                setTimeout(() => {
-                    downloadBtn.innerHTML = '<i class="fas fa-download"></i> تحميل التطبيق';
-                    downloadBtn.disabled = false;
-                    downloadBtn.style.background = '';
-                }, 2000);
-            }, 1000);
         });
         
-        // Simulate ad loading at different scroll points
-        window.addEventListener('load', () => {
-            // Simulate ad loading at different scroll points
-            setTimeout(() => {
-                console.log('الإعلان 1: تم تحميله');
-            }, 3000);
-            
-            let adCounter = 1;
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 800 && adCounter === 1) {
-                    console.log('الإعلان 2: تم تحميله');
-                    adCounter++;
-                }
-                
-                if (window.scrollY > 1800 && adCounter === 2) {
-                    console.log('الإعلان 3: تم تحميله');
-                    adCounter++;
-                }
-                
-                if (window.scrollY > 3000 && adCounter === 3) {
-                    console.log('الإعلان 4: تم تحميله');
-                    adCounter++;
-                }
-                
-                if (window.scrollY > 4500 && adCounter === 4) {
-                    console.log('الإعلان 5: تم تحميله');
-                    adCounter++;
-                }
-                
-                if (window.scrollY > 6000 && adCounter === 5) {
-                    console.log('الإعلان 6: تم تحميله');
-                    adCounter++;
-                }
-            });
-        });
         
         // Touch event for mobile
         document.addEventListener('touchstart', function() {}, {passive: true});
