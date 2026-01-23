@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ماتريك نجمه - مشاهدة باقة نجمة ستة</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4A148C;
+            --primary-dark: #311B92;
+            --primary-light: #7C4DFF;
+            --secondary: #FF4081;
+            --accent: #00BCD4;
+            --light: #F5F5F5;
+            --dark: #121212;
+            --gray: #424242;
+            --light-gray: #E0E0E0;
+            --card-light: #FFFFFF;
+            --card-dark: #1A1A2E;
+            --radius: 20px;
+            --shadow: 0 15px 35px rgba(74, 20, 140, 0.15);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f5f5 0%, #f0f2f5 100%);
+            color: #333;
+            transition: var(--transition);
+            overflow-x: hidden;
+        }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            color: #f0f0f0;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1.8rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(74, 20, 140, 0.25);
+            border-bottom-left-radius: var(--radius);
+            border-bottom-right-radius: var(--radius);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 3rem;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            transition: var(--transition);
+        }
+
+        .logo:hover {
+            transform: rotate(10deg) scale(1.05);
+        }
+
+        .site-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            letter-spacing: 1px;
+        }
+
+        .site-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-top: 0.3rem;
+            font-weight: 300;
+        }
+
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: rotate(45deg) scale(1.1);
+        }
+
+        /* Content Sections */
+        .content-section {
+            padding: 4rem 0;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 3rem 4rem;
+        }
+
+        .content-card {
+            background: var(--card-light);
+            border-radius: var(--radius);
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: var(--shadow);
+            border-left: 8px solid var(--primary);
+        }
+
+        .dark-mode .content-card {
+            background: var(--card-dark);
+        }
+
+        .content-title {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .content-title i {
+            color: var(--secondary);
+        }
+
+        .content-text {
+            font-size: 1.2rem;
+            line-height: 1.9;
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(74, 20, 140, 0.1), rgba(255, 64, 129, 0.1));
+            border-right: 5px solid var(--primary);
+            padding: 2rem;
+            border-radius: var(--radius);
+            margin: 2rem 0;
+        }
+
+        .dark-mode .highlight-box {
+            background: linear-gradient(135deg, rgba(74, 20, 140, 0.2), rgba(255, 64, 129, 0.2));
+        }
+
+        /* App Info Section */
+        .app-info-section {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: white;
+            padding: 5rem 0;
+            border-radius: var(--radius);
+            margin: 3rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-info-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            transform: translate(30%, -30%);
+        }
+
+        .app-info-section::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            transform: translate(-30%, 30%);
+        }
+
+        .app-info-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .app-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .app-info-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+        }
+
+        .app-info-item:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .app-info-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+        }
+
+        .app-info-title {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+        }
+
+        .app-info-text {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            opacity: 0.9;
+        }
+
+        /* Action Buttons Section */
+        .action-section {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border-radius: var(--radius);
+            padding: 6rem 3rem;
+            margin: 5rem auto;
+            max-width: 1200px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 64, 129, 0.1) 0%, transparent 70%);
+            z-index: 0;
+        }
+
+        .action-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .action-title {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .action-text {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 1.5rem 3.5rem;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            min-width: 280px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.2));
+            z-index: -1;
+            transition: var(--transition);
+            opacity: 0;
+        }
+
+        .action-btn:hover::before {
+            opacity: 1;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, var(--secondary), #E91E63);
+            color: white;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(255, 64, 129, 0.4);
+        }
+
+        .code-btn {
+            background: linear-gradient(135deg, var(--accent), #0097A7);
+            color: white;
+        }
+
+        .code-btn:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(0, 188, 212, 0.4);
+        }
+
+        /* Progress Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--card-light);
+            width: 90%;
+            max-width: 500px;
+            border-radius: var(--radius);
+            padding: 3rem;
+            text-align: center;
+            transform: translateY(50px) scale(0.9);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            border: 1px solid rgba(74, 20, 140, 0.2);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .dark-mode .modal {
+            background: var(--card-dark);
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            left: 1.5rem;
+            background: rgba(74, 20, 140, 0.1);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.3rem;
+            color: var(--primary);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: var(--primary);
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        .modal-title {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .modal-text {
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+
+        .progress-container {
+            width: 100%;
+            background: #e0e0e0;
+            border-radius: 50px;
+            overflow: hidden;
+            margin: 2rem 0;
+            height: 20px;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode .progress-container {
+            background: #333;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            width: 0%;
+            transition: width 0.3s linear;
+            border-radius: 50px;
+        }
+
+        .progress-text {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .code-display {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            padding: 1.5rem;
+            border: 3px dashed var(--primary);
+            border-radius: var(--radius);
+            margin: 1.5rem 0;
+            display: none;
+            letter-spacing: 3px;
+        }
+
+        .code-display.show {
+            display: block;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 5px 20px rgba(74, 20, 140, 0.2); }
+            50% { transform: scale(1.03); box-shadow: 0 10px 30px rgba(74, 20, 140, 0.4); }
+            100% { transform: scale(1); box-shadow: 0 5px 20px rgba(74, 20, 140, 0.2); }
+        }
+
+        .code-warning {
+            color: var(--secondary);
+            font-weight: bold;
+            margin-top: 1rem;
+            font-size: 1.1rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, #0f0c29, #302b63);
+            color: #eee;
+            padding: 5rem 0 2rem;
+            margin-top: 6rem;
+            border-top-left-radius: var(--radius);
+            border-top-right-radius: var(--radius);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 64, 129, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+
+        .footer-logo img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .footer-title {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent), white);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .footer-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 5rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #aaa;
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Scroll Animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 2.5rem;
+            left: 2.5rem;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            z-index: 100;
+            box-shadow: 0 8px 25px rgba(74, 20, 140, 0.3);
+            border: none;
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-10px) scale(1.1);
+            box-shadow: 0 15px 35px rgba(74, 20, 140, 0.4);
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 100px;
+            right: 50%;
+            transform: translateX(50%);
+            background: rgba(74, 20, 140, 0.8);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            z-index: 99;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .scroll-indicator.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .header-content, .content-section {
+                padding: 0 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .site-title {
+                font-size: 1.8rem;
+            }
+            
+            .content-title {
+                font-size: 1.8rem;
+            }
+            
+            .action-btn {
+                min-width: 100%;
+            }
+            
+            .action-title {
+                font-size: 2.2rem;
+            }
+            
+            .app-info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="https://i.ibb.co/21M7Zp04/5c2681bd-90e4-44f3-8dfc-0a0127612bba.jpg" alt="Matric Nejma Logo" class="logo">
+                <div>
+                    <h1 class="site-title">ماتريك نجمه</h1>
+                    <p class="site-subtitle">مشاهدة القنوات بباقة نجمة ستة فقط، المباريات، الأفلام والمسلسلات</p>
+                </div>
+            </div>
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Content Sections -->
+    <div class="content-section">
+        <!-- Article 1 -->
+        <div class="content-card fade-in">
+            <h2 class="content-title"><i class="fas fa-futbol"></i> عالم كرة القدم: الشغف الذي يوحد الشعوب</h2>
+            <p class="content-text">كرة القدم ليست مجرد لعبة، إنها لغة عالمية تتحدث بها الشعوب وتتواصل من خلالها الثقافات. منذ بداياتها المتواضعة في القرن التاسع عشر في إنجلترا، تطورت كرة القدم لتصبح الرياضة الأكثر شعبية في العالم، بمتابعة تصل إلى أكثر من 4 مليارات مشجع حول الكرة الأرضية.</p>
+            
+            <div class="highlight-box">
+                <p>ما يميز كرة القدم هو قدرتها على خلق لحظات تاريخية تبقى في ذاكرة الأجيال. من أهداف بيليه الأسطورية في كأس العالم 1970، إلى يد الله لمارادونا في 1986، وصولاً إلى عروض ميسي ورونالدو الاستثنائية في العقدين الماضيين. هذه اللحظات ليست مجرد أحداث رياضية، بل أصبحت جزءاً من التراث الثقافي الإنساني.</p>
+            </div>
+            
+            <p class="content-text">تطورت كرة القدم تقنياً وتكتيكياً بشكل مذهل. من أنظمة اللعب البسيطة في بداياتها إلى التكتيكات المعقدة اليوم مثل الجيجين بريس والتيكي تاكا. كما أدخلت التكنولوجيا تغييرات جذرية في اللعبة، من تقنية خط المرمى إلى حكم الفيديو المساعد (VAR)، مما جعل القرارات التحكيمية أكثر دقة وعدالة.</p>
+            
+            <p class="content-text">لكن جوهر كرة القدم يبقى نفسه: 22 لاعباً، كرة واحدة، وشغف الملايين. هذه البساطة هي سر جاذبيتها وقدرتها على تجاوز الحدود الجغرافية والسياسية والثقافية. في الملعب، تختفي الفروقات وتصبح المهارة والإرادة هي المعيار الوحيد.</p>
+        </div>
+        
+        <!-- Article 2 -->
+        <div class="content-card fade-in">
+            <h2 class="content-title"><i class="fas fa-trophy"></i> البطولات الكبرى: مسرح الأساطير</h2>
+            <p class="content-text">تشكل البطولات الكبرى ذروة المنافسة في عالم كرة القدم. كأس العالم، بطولة الأمم الأوروبية، كوبا أمريكا، دوري أبطال أوروبا، والدوريات المحلية الكبرى - كلها أحداث تنتظرها جماهير كرة القدم بفارغ الصبر.</p>
+            
+            <p class="content-text">تتميز كل بطولة بطابعها الخاص وجوها الفريد. كأس العالم هو الحدث الرياضي الأضخم على الإطلاق، يجمع أفضل المنتخبات من جميع القارات. دوري أبطال أوروبا هو قمة المنافسة بين الأندية، حيث تلتقي مدارس كرة القدم المختلفة في صراع تقني وتكتيكي رفيع المستوى.</p>
+            
+            <div class="highlight-box">
+                <p>البطولات المحلية أيضاً لها سحرها الخاص. الدوري الإنجليزي الممتاز بسرعة إيقاعه وشراسته، الليجا الإسبانية بفنانيها وتكتيكاتها المتطورة، السيريا أ الإيطالية بتفوقها الدفاعي، والدوري الألماني بحماس جماهيره وتنظيمه المتميز. كل دورية تقدم نموذجاً مختلفاً لكرة القدم الجميلة.</p>
+            </div>
+            
+            <p class="content-text">في العالم العربي، تشهد الدوريات تطوراً ملحوظاً. الدوري المغربي يبرز بقوة في السنوات الأخيرة، والدوري السعودي يجذب نجوم العالم، والدوري المصري يتمتع بتاريخ غني وشعبية جارفة. هذه التطورات تعكس النمو الكبير لكرة القدم العربية على المستوى القاري والعالمي.</p>
+            
+            <p class="content-text">البطولات ليست مجرد منافسات رياضية، بل هي قصص إنسانية مليئة بالدراما، الفرح، الخيبة، والبطولات الفردية والجماعية. كل مباراة تحمل في طياتها احتمالات لا نهائية، وكل هدف قد يغير مسار التاريخ، وكل بطولة تخلق أبطالاً جدداً يدخلون سجلات الخلود.</p>
+        </div>
+        
+        <!-- App Info Section -->
+        <section class="app-info-section fade-in">
+            <div class="app-info-container">
+                <h2 class="section-title" style="color: white;">ماتريك نجمه: باقة نجمة ستة</h2>
+                
+                <div class="app-info-grid">
+                    <div class="app-info-item">
+                        <div class="app-info-icon">
+                            <i class="fas fa-satellite-dish"></i>
+                        </div>
+                        <h3 class="app-info-title">باقة نجمة ستة فقط</h3>
+                        <p class="app-info-text">تطبيق ماتريك نجمه يوفر مشاهدة حصرية للقنوات الموجودة في باقة نجمة ستة فقط، مع بث مستقر وعالي الجودة على مدار 24 ساعة. الباقة تشمل مجموعة مختارة من القنوات المغربية والعربية.</p>
+                    </div>
+                    
+                    <div class="app-info-item">
+                        <div class="app-info-icon">
+                            <i class="fas fa-futbol"></i>
+                        </div>
+                        <h3 class="app-info-title">مباريات جميع الدوريات</h3>
+                        <p class="app-info-text">شاهد مباريات جميع الدوريات العالمية والعربية: الدوري المغربي، الدوري الإنجليزي، الليجا الإسبانية، السيريا أ الإيطالية، دوري الأبطال، وبطولات العالم. بث مباشر عالي الجودة مع تعليق عربي.</p>
+                    </div>
+                    
+                    <div class="app-info-item">
+                        <div class="app-info-icon">
+                            <i class="fas fa-film"></i>
+                        </div>
+                        <h3 class="app-info-title">أفلام ومسلسلات</h3>
+                        <p class="app-info-text">مكتبة ضخمة من الأفلام والمسلسلات العربية والعالمية بأعلى جودة. تشمل جميع الأنواع: أكشن، دراما، كوميديا، رعب، وثائقيات، مع تحديث مستمر للمحتوى.</p>
+                    </div>
+                    
+                    <div class="app-info-item">
+                        <div class="app-info-icon">
+                            <i class="fas fa-tv"></i>
+                        </div>
+                        <h3 class="app-info-title">قنوات تلفزيونية 24/7</h3>
+                        <p class="app-info-text">القنوات التلفزيونية في باقة نجمة ستة تشتغل على مدار 24 ساعة بدون انقطاع: قنوات رياضية، إخبارية، أفلام، مسلسلات، ترفيهية، أطفال، وثقافية.</p>
+                    </div>
+                    
+                    <div class="app-info-item">
+                        <div class="app-info-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h3 class="app-info-title">كود تفعيل أسبوعي</h3>
+                        <p class="app-info-text">كود التفعيل يتغير أسبوعياً لحماية النظام وضمان تجربة أفضل للمستخدمين. يجب الحصول على كود جديد كل أسبوع للاستمرار في استخدام التطبيق.</p>
+                    </div>
+                    
+                    <div class="app-info-item">
+                        <div class="app-info-icon">
+                            <i class="fas fa-download"></i>
+                        </div>
+                        <h3 class="app-info-title">تحميل واستخدام بسيط</h3>
+                        <p class="app-info-text">حمل التطبيق، استخدم الكود، وابدأ المشاهدة. واجهة سهلة الاستخدام تناسب جميع الأعمال، مع دعم كامل للغة العربية.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Article 3 -->
+        <div class="content-card fade-in">
+            <h2 class="content-title"><i class="fas fa-history"></i> تطور كرة القدم العربية</h2>
+            <p class="content-text">شهدت كرة القدم العربية تطوراً ملحوظاً في العقود الأخيرة، رغم التحديات الكبيرة التي واجهتها. من المستوى المتواضع في الستينيات والسبعينيات، إلى المنافسة القوية في الساحات القارية والعالمية اليوم.</p>
+            
+            <p class="content-text">حققت المنتخبات العربية إنجازات مهمة على المستوى العالمي. المغرب كان أول منتخب عربي وإفريقي يصل إلى نصف نهائي كأس العالم في نسخة 2022، السعودية هزمت الأرجنتين حاملة اللقب في نفس البطولة، وتونس فازت على فرنسا في 2022. هذه النتائج تعكس تطوراً حقيقياً في المستوى الفني والتكتيكي.</p>
+            
+            <div class="highlight-box">
+                <p>على مستوى الأندية، حققت الأندية العربية إنجازات كبيرة في البطولات القارية. الأهلي والزمالك من مصر، الترجي والنجم الساحلي من تونس، الرجاء والوداد من المغرب، والهلال والنصر من السعودية - جميعهم ساهموا في رفع مستوى كرة القدم العربية وكتابة تاريخ مشرف في البطولات الإفريقية والآسيوية.</p>
+            </div>
+            
+            <p class="content-text">كما شهدت البنية التحتية تطوراً كبيراً. الملاعب العالمية في قطر، المغرب، السعودية، والإمارات تضاهي أفضل الملاعب الأوروبية. مراكز التدريب المتطورة، الأكاديميات الشبابية، والاستثمار في تطوير اللاعبين كلها عوامل ساهمت في رفع المستوى.</p>
+            
+            <p class="content-text">لكن التحديات ما تزال قائمة: ضعف الدوري المحلي في بعض الدول، هجرة المواهب المبكرة إلى الخارج، مشاكل الإدارة والتنظيم، وقلة الاستثمار في بعض المناطق. مع ذلك، المستقبل يبشر بمزيد من التطور مع زيادة الاهتمام الرسمي والشعبي باللعبة.</p>
+        </div>
+        
+        <!-- Article 4 -->
+        <div class="content-card fade-in">
+            <h2 class="content-title"><i class="fas fa-star"></i> نجوم كرة القدم: بين الموهبة والعمل الجاد</h2>
+            <p class="content-text">تاريخ كرة القدم مليء بالنجوم الذين تركوا بصمتهم على اللعبة. كل جيل ينتج أبطاله الخاصين، لكن القليل منهم فقط يصلون إلى درجة الأسطورة.</p>
+            
+            <p class="content-text">النجوم الحقيقون لا يبرزون فقط بمهاراتهم الفنية، بل بإرادتهم القوية، قيادتهم، وتأثيرهم على فرقهم. بيليه لم يكن مجرد هداف، بل كان رمزاً للبرازيل والعالم. مارادونا حمل منتخب الأرجنتين على ظهره نحو المجد. زيدان جمع بين الأناقة الفنية والقيادة.</p>
+            
+            <div class="highlight-box">
+                <p>في العصر الحديث، قدم لنا ميسي ورونالدو منافسة هي الأكثر تأثيراً في تاريخ الرياضة. لمدة 15 عاماً، تفوقا على جميع منافسيهما وحققا أرقاماً قياسية تبدو مستحيلة. هذه المنافسة رفعت مستوى الكرة العالمية وألهمت جيلاً كاملاً من اللاعبين.</p>
+            </div>
+            
+            <p class="content-text">النجوم العرب أيضاً تركوا بصمتهم. محمود الخطيب، الكابتن المصري الأسطوري. بادو الزاكي، حارس المغرب التاريخي. ماجد عبد الله، هداف السعودية الأعلى. ياسر القحطاني، نجم الكرة السعودية. هؤلاء وغيرهم أصبحوا رموزاً وطنية وألهموا ملايين الشباب.</p>
+            
+            <p class="content-text">لكن صناعة النجم اليوم تختلف عن الماضي. وسائل الإعلام، الشبكات الاجتماعية، والتسويق أصبحت عوامل حاسمة في بناء صورة اللاعب. مع ذلك، يبقى الملعب هو المحك الحقيقي، حيث لا مكان للإعلام الزائف أو الشهرة المصطنعة.</p>
+        </div>
+        
+        <!-- Article 5 -->
+        <div class="content-card fade-in">
+            <h2 class="content-title"><i class="fas fa-globe"></i> كرة القدم وتأثيرها الثقافي والاجتماعي</h2>
+            <p class="content-text">تتجاوز كرة القدم كونها مجرد رياضة، فهي ظاهرة ثقافية واجتماعية مؤثرة. الملعب أصبح مسرحاً للتعبير عن الهوية، الاحتفال بالتنوع، وأحياناً الاحتجاج على الظلم.</p>
+            
+            <p class="content-text">في العديد من الدول، تلعب كرة القدم دوراً في بناء السلام والمصالحة. في ساحل العاج، ساعد منتخب كرة القدم في تخفيف التوترات خلال الحرب الأهلية. في رواندا، استخدمت كرة القدم كأداة للم الشمل بعد الإبادة الجماعية. هذه الأمثلة تظهر قدرة اللعبة على تجاوز الخلافات السياسية والعرقية.</p>
+            
+            <div class="highlight-box">
+                <p>كما أصبحت كرة القدم منصة للقضايا الاجتماعية. اللاعبون يستخدمون شهرتهم للتوعية بقضايا مثل العنصرية، الفقر، التغير المناخي، والصحة العقلية. الحملات مثل "خذ الركبة" ضد العنصرية، ومبادرات التبرع للأعمال الخيرية، تظهر التزام نجوم الكرة بمسؤولياتهم الاجتماعية.</p>
+            </div>
+            
+            <p class="content-text">على المستوى الاقتصادي، تحولت كرة القدم إلى صناعة بمليارات الدولارات. حقوق البث، الرعايات، انتقالات اللاعبين، والتسويق كلها تساهم في اقتصاد عالمي ضخم. هذا النمو الاقتصادي خلق فرص عمل، استثمارات، وتنمية في العديد من المجتمعات.</p>
+            
+            <p class="content-text">لكن هذا النجاح يحمل تحديات أيضاً: التصاريح الباهظة، الفساد في بعض الاتحادات، الاستغلال التجاري المفرط، وتأثير الأموال على روح اللعبة. مع ذلك، يبقى الجوهر الإنساني لكرة القدم هو سر بقائها وانتشارها.</p>
+        </div>
+        
+        <!-- Article 6 -->
+        <div class="content-card fade-in">
+            <h2 class="content-title"><i class="fas fa-chart-line"></i> مستقبل كرة القدم: بين التقاليد والابتكار</h2>
+            <p class="content-text">تقف كرة القدم اليوم على مفترق طرق بين الحفاظ على تقاليدها العريقة وتبني الابتكارات الحديثة. التكنولوجيا، العلم، والتجارة كلها عوامل تعيد تشكيل اللعبة كما نعرفها.</p>
+            
+            <p class="content-text">التكنولوجيا أحدثت ثورة في طريقة لعب ومتابعة كرة القدم. تقنية VAR غيرت القرارات التحكيمية إلى الأبد. أنظمة تتبع اللاعبين توفر بيانات دقيقة عن الأداء. التحليلات المتقدمة تساعد المدربين في وضع الخطط التكتيكية. الواقع الافتراضي والمعزز يغيران طريقة تدريب اللاعبين ومشاهدة المباريات.</p>
+            
+            <div class="highlight-box">
+                <p>العلم أيضاً يلعب دوراً متزايداً. علوم الرياضة، التغذية، الطب الرياضي، وعلم النفس كلها أصبحت أساسية في تطوير اللاعبين. الأبحاث في مجال إصابات الرباط الصليبي، الارتجاجات الدماغية، والتعافي تساهم في إطالة عمر اللاعبين المهني وحماية صحتهم.</p>
+            </div>
+            
+            <p class="content-text">على مستوى التنظيم، تشهد كرة القدم تغييرات كبيرة. توسيع بطولات مثل كأس العالم ودوري الأبطال، إنشاء دوري الأمم الأوروبية، ومناقشة إقامة دوري سوبر أوروبي - كلها تحولات تعيد تشكيل المشهد الكروي. هذه التغييرات تهدف إلى زيادة الإثارة والإيرادات، لكنها تثير جدلاً حول تأثيرها على روح اللعبة.</p>
+            
+            <p class="content-text">رغم كل هذه التطورات، يبقى التحدي الأكبر هو الحفاظ على جوهر كرة القدم: اللعبة الجميلة التي تجمع بين المهارة الفردية والعمل الجماعي، بين الإستراتيجية والتلقائية، بين الشغف والاحتراف. المستقبل سيكتبه أولئك الذين يستطيعون الموازنة بين الابتكار والحفاظ على الروح الأصلية للعبة.</p>
+        </div>
+    </div>
+
+    <!-- Action Buttons Section -->
+    <section class="action-section fade-in">
+        <div class="action-content">
+            <h2 class="action-title">تحميل تطبيق ماتريك نجمه</h2>
+            <p class="action-text">تطبيق ماتريك نجمه يوفر لك مشاهدة القنوات بباقة نجمة ستة فقط، جميع المباريات الرياضية، الأفلام، المسلسلات، والقنوات التلفزيونية التي تعمل 24 ساعة. حمل التطبيق الآن واستمتع بمشاهدة المحتوى المفضل لديك.</p>
+            <p class="action-text">الكود يتغير أسبوعياً، لذا ستحتاج للحصول على كود جديد كل أسبوع لتفعيل التطبيق والاستمرار في الاستخدام.</p>
+            
+            <div class="buttons-container">
+                <button class="action-btn download-btn" id="downloadBtn">
+                    <i class="fas fa-download"></i>
+                    تحميل التطبيق
+                </button>
+                <button class="action-btn code-btn" id="showCodeBtn">
+                    <i class="fas fa-key"></i>
+                    الحصول على كود التفعيل
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="https://i.ibb.co/21M7Zp04/5c2681bd-90e4-44f3-8dfc-0a0127612bba.jpg" alt="Matric Nejma Logo">
+                <div>
+                    <h3 class="footer-title">ماتريك نجمه</h3>
+                    <p>مشاهدة القنوات بباقة نجمة ستة فقط</p>
+                </div>
+            </div>
+            
+            <p class="footer-text">تطبيق ماتريك نجمه يوفر خدمة مشاهدة القنوات بباقة نجمة ستة فقط، المباريات الرياضية، الأفلام، المسلسلات، والقنوات التلفزيونية. الكود يتغير أسبوعياً ويجب الحصول على كود جديد للتفعيل.</p>
+            <p class="footer-text">حمل التطبيق، استخدم الكود، واستمتع بالمشاهدة.</p>
+        </div>
+        
+        <div class="copyright">
+            <p>© 2023 ماتريك نجمه. هذا الموقع والمحتوى ملك لنا.</p>
+        </div>
+    </footer>
+
+    <!-- Progress Modal -->
+    <div class="modal-overlay" id="codeModal">
+        <div class="modal">
+            <button class="modal-close" id="closeModal"><i class="fas fa-times"></i></button>
+            <h3 class="modal-title">جاري توليد كود التفعيل الأسبوعي</h3>
+            <p class="modal-text">تطبيق ماتريك نجمه يستخدم أكواد تفعيل أسبوعية تتغير كل أسبوع لحماية النظام. يرجى الانتظار 30 ثانية بينما نقوم بتوليد كود تفعيل جديد لك.</p>
+            
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            
+            <p class="progress-text" id="progressText">0% مكتمل</p>
+            
+            <div class="code-display" id="codeDisplay">
+                <span id="activationCode">XXXXXX</span>
+            </div>
+            
+            <p class="code-warning">⚠️ هذا الكود ساري لمدة أسبوع واحد فقط!</p>
+        </div>
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator" id="scrollIndicator">
+        <i class="fas fa-arrow-down"></i>
+        <span>استمر في التمرير للأسفل للوصول إلى أزرار التحميل والكود</span>
+    </div>
+
+    <!-- Back to Top Button -->
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('i');
+        
+        // Check saved theme or prefer-color-scheme
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+        const currentTheme = localStorage.getItem('theme');
+        
+        if (currentTheme === 'dark' || (!currentTheme && prefersDarkScheme.matches)) {
+            document.body.classList.add('dark-mode');
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            
+            if (document.body.classList.contains('dark-mode')) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+        
+        // Scroll Animation
+        const fadeElements = document.querySelectorAll('.fade-in');
+        const scrollIndicator = document.getElementById('scrollIndicator');
+        
+        const fadeInOnScroll = () => {
+            fadeElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (elementTop < windowHeight - 100) {
+                    element.classList.add('visible');
+                }
+            });
+            
+            // Show scroll indicator until user has scrolled down enough
+            const scrollPosition = window.scrollY;
+            const windowHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight;
+            
+            // Show indicator if user hasn't scrolled at least 80% of the page
+            if (scrollPosition < documentHeight * 0.8) {
+                scrollIndicator.classList.add('show');
+            } else {
+                scrollIndicator.classList.remove('show');
+            }
+        };
+        
+        window.addEventListener('scroll', fadeInOnScroll);
+        window.addEventListener('load', fadeInOnScroll);
+        
+        // Back to Top Button
+        const backToTop = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        });
+        
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Code Modal with Progress
+        const codeModal = document.getElementById('codeModal');
+        const showCodeBtn = document.getElementById('showCodeBtn');
+        const closeModal = document.getElementById('closeModal');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const codeDisplay = document.getElementById('codeDisplay');
+        const activationCode = document.getElementById('activationCode');
+        
+        let progressInterval;
+        let progress = 0;
+        
+        // Generate a random 6-digit code
+        function generateRandomCode() {
+            return Math.floor(100000 + Math.random() * 900000);
+        }
+        
+        showCodeBtn.addEventListener('click', () => {
+            // Reset progress
+            progress = 0;
+            progressBar.style.width = '0%';
+            progressText.textContent = '0% مكتمل';
+            codeDisplay.classList.remove('show');
+            
+            // Show modal
+            codeModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            // Start progress simulation (30 seconds)
+            progressInterval = setInterval(() => {
+                progress += 1;
+                progressBar.style.width = `${progress}%`;
+                progressText.textContent = `${progress}% مكتمل`;
+                
+                if (progress >= 30) {
+                    progressText.textContent = 'جاري توليد الكود...';
+                }
+                
+                if (progress >= 100) {
+                    clearInterval(progressInterval);
+                    
+                    // Generate and show code
+                    const code = generateRandomCode();
+                    activationCode.textContent = code;
+                    codeDisplay.classList.add('show');
+                    progressText.textContent = 'اكتمل! الكود جاهز للاستخدام';
+                }
+            }, 300); // 30 seconds total
+        });
+        
+        closeModal.addEventListener('click', () => {
+            // Only allow closing if progress is complete
+            if (progress >= 100) {
+                codeModal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+                clearInterval(progressInterval);
+            } else {
+                alert('يرجى الانتظار حتى اكتمال توليد الكود!');
+            }
+        });
+        
+        // Close modal when clicking outside
+        codeModal.addEventListener('click', (e) => {
+            if (e.target === codeModal && progress >= 100) {
+                codeModal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+                clearInterval(progressInterval);
+            } else if (e.target === codeModal) {
+                alert('يرجى الانتظار حتى اكتمال توليد الكود!');
+            }
+        });
+        
+        // Download Button
+        const downloadBtn = document.getElementById('downloadBtn');
+        
+        downloadBtn.addEventListener('click', () => {
+            // Simulate download process
+            downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحميل...';
+            downloadBtn.disabled = true;
+            
+            setTimeout(() => {
+                // Create fake download link
+                const link = document.createElement('a');
+                link.href = '#';
+                link.download = 'Matric_Nejma_App.apk';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                // Reset button
+                downloadBtn.innerHTML = '<i class="fas fa-check"></i> تم التحميل بنجاح';
+                downloadBtn.style.background = 'linear-gradient(135deg, #4CAF50, #388E3C)';
+                
+                setTimeout(() => {
+                    downloadBtn.innerHTML = '<i class="fas fa-download"></i> تحميل التطبيق';
+                    downloadBtn.disabled = false;
+                    downloadBtn.style.background = '';
+                }, 2000);
+            }, 2000);
+        });
+        
+        // Simulate ad loading at different scroll points
+        window.addEventListener('load', () => {
+            // Simulate ad loading at different scroll points
+            setTimeout(() => {
+                console.log('الإعلان 1: تم تحميله');
+            }, 3000);
+            
+            let adCounter = 1;
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 800 && adCounter === 1) {
+                    console.log('الإعلان 2: تم تحميله');
+                    adCounter++;
+                }
+                
+                if (window.scrollY > 1800 && adCounter === 2) {
+                    console.log('الإعلان 3: تم تحميله');
+                    adCounter++;
+                }
+                
+                if (window.scrollY > 3000 && adCounter === 3) {
+                    console.log('الإعلان 4: تم تحميله');
+                    adCounter++;
+                }
+                
+                if (window.scrollY > 4500 && adCounter === 4) {
+                    console.log('الإعلان 5: تم تحميله');
+                    adCounter++;
+                }
+                
+                if (window.scrollY > 6000 && adCounter === 5) {
+                    console.log('الإعلان 6: تم تحميله');
+                    adCounter++;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
