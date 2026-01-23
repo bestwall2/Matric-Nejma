@@ -140,6 +140,7 @@
             max-width: 1400px;
             margin: 0 auto;
             padding: 0 1.5rem 2rem;
+            margin-top: 40px; /* تمت إضافة هذا السطر */
         }
 
         .content-card {
@@ -475,35 +476,6 @@
             font-size: 0.95rem;
         }
 
-        .progress-container {
-            width: 100%;
-            background: #e0e0e0;
-            border-radius: 50px;
-            overflow: hidden;
-            margin: 1.5rem 0;
-            height: 15px;
-            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .dark-mode .progress-container {
-            background: #333;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            width: 0%;
-            transition: width 0.3s linear;
-            border-radius: 50px;
-        }
-
-        .progress-text {
-            font-size: 1rem;
-            margin-bottom: 1.2rem;
-            font-weight: 600;
-            color: var(--primary);
-        }
-
         .code-display {
             font-size: 2.2rem;
             font-weight: 800;
@@ -515,14 +487,37 @@
             border: 3px dashed var(--primary);
             border-radius: var(--radius);
             margin: 1.2rem 0;
-            display: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
             letter-spacing: 2px;
             word-break: break-all;
         }
 
         .code-display.show {
-            display: block;
+            display: flex;
             animation: pulse 2s infinite;
+        }
+
+        .copy-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1.2rem;
+        }
+
+        .copy-btn:hover {
+            background: var(--secondary);
+            transform: scale(1.1);
         }
 
         @keyframes pulse {
@@ -720,6 +715,7 @@
             
             .content-section {
                 padding: 0 2rem 3rem;
+                margin-top: 50px; /* تعديل للتابلت */
             }
             
             .content-card {
@@ -842,6 +838,7 @@
             
             .content-section {
                 padding: 0 3rem 4rem;
+                margin-top: 60px; /* تعديل للديسكتوب */
             }
             
             .content-card {
@@ -964,6 +961,7 @@
             
             .content-section {
                 padding: 0 1rem 1.5rem;
+                margin-top: 30px; /* تعديل للهواتف الصغيرة */
             }
             
             .content-card {
@@ -1212,10 +1210,21 @@
             <p class="content-text">البطولات ليست مجرد منافسات رياضية، بل هي قصص إنسانية مليئة بالدراما، الفرح، الخيبة، والبطولات الفردية والجماعية. كل مباراة تحمل في طياتها احتمالات لا نهائية، وكل هدف قد يغير مسار التاريخ، وكل بطولة تخلق أبطالاً جدداً يدخلون سجلات الخلود.</p>
         </div>
         
+        <!-- Article 7 - New Article -->
+        <div class="content-card fade-in">
+            <h2 class="content-title"><i class="fas fa-users"></i> كرة القدم النسائية: الثورة الصامتة</h2>
+            <p class="content-text">شهدت كرة القدم النسائية نمواً هائلاً في العقدين الماضيين، حيث تحولت من رياضة هامشية إلى ظاهرة عالمية تجذب ملايين المشجعين. بدأت رحلة كرة القدم النسائية بصعوبات كبيرة، من منع ممارستها في بعض الدول إلى نقص التمويل والدعم، لكن إصرار اللاعبات غير مسار التاريخ.</p>
+            
+            <div class="highlight-box">
+                <p>كأس العالم للسيدات 2023 كان نقطة تحول فارقة، حيث حققت البطولة أرقاماً قياسية في الحضور الجماهيري والمشاهدات التلفزيونية. المنتخبات النسائية مثل الولايات المتحدة، إنجلترا، إسبانيا، وألمانيا قدمت مستويات تقنية مذهلة غيرت الصورة النمطية عن كرة القدم النسائية.</p>
+            </div>
+            
+            <p class="content-text">عربياً، تشهد كرة القدم النسائية تطوراً ملحوظاً. المغرب كان أول منتخب عربي يصل إلى دور الـ16 في كأس العالم للسيدات 2023، بينما استضافت السعودية أول بطولة رسمية للدوري النسائي في 2022. هذه الخطوات تعكس تغييراً جذرياً في نظرة المجتمعات العربية للرياضة النسائية.</p>
+            
+            <p class="content-text">التحديات ما تزال موجودة، لكن المستقبل يبدو مشرقاً لكرة القدم النسائية. زيادة الاستثمار، تحسين البنية التحتية، والتغطية الإعلامية الأفضل كلها عوامل تساهم في خلق جيل جديد من النجمات العربيات والعالميات اللاتي يقدمن كرة قدم راقية تلهم ملايين الفتيات حول العالم.</p>
+        </div>
        
-        
         <!-- Articles 3-6 -->
-        <!-- ... محتوى المقالات المتبقية كما هو في الكود السابق ... -->
         <div class="content-card fade-in">
             <h2 class="content-title"><i class="fas fa-history"></i> تطور كرة القدم العربية</h2>
             <p class="content-text">شهدت كرة القدم العربية تطوراً ملحوظاً في العقود الأخيرة، رغم التحديات الكبيرة التي واجهتها. من المستوى المتواضع في الستينيات والسبعينيات، إلى المنافسة القوية في الساحات القارية والعالمية اليوم.</p>
@@ -1321,17 +1330,14 @@
     <div class="modal-overlay" id="codeModal">
         <div class="modal">
             <button class="modal-close" id="closeModal"><i class="fas fa-times"></i></button>
-            <h3 class="modal-title">جاري توليد كود التفعيل الأسبوعي</h3>
-            <p class="modal-text">تطبيق ماتريك نجمه يستخدم أكواد تفعيل أسبوعية تتغير كل أسبوع لحماية النظام. يرجى الانتظار 30 ثانية بينما نقوم بتوليد كود تفعيل جديد لك.</p>
+            <h3 class="modal-title">كود التفعيل الأسبوعي</h3>
+            <p class="modal-text">تطبيق ماتريك نجمه يستخدم أكواد تفعيل أسبوعية تتغير كل أسبوع لحماية النظام. هذا هو كود التفعيل الحالي:</p>
             
-            <div class="progress-container">
-                <div class="progress-bar" id="progressBar"></div>
-            </div>
-            
-            <p class="progress-text" id="progressText">0% مكتمل</p>
-            
-            <div class="code-display" id="codeDisplay">
-                <span id="activationCode">XXXXXX</span>
+            <div class="code-display show">
+                <span id="activationCode">203030</span>
+                <button class="copy-btn" id="copyCodeBtn" title="نسخ الكود">
+                    <i class="fas fa-copy"></i>
+                </button>
             </div>
             
             <p class="code-warning">⚠️ هذا الكود ساري لمدة أسبوع واحد فقط!</p>
@@ -1394,7 +1400,6 @@
             
             // Show scroll indicator until user has scrolled down enough
             const scrollPosition = window.scrollY;
-            const windowHeight = window.innerHeight;
             const documentHeight = document.documentElement.scrollHeight;
             
             // Show indicator if user hasn't scrolled at least 80% of the page
@@ -1426,75 +1431,58 @@
             });
         });
         
-        // Code Modal with Progress
+        // Code Modal
         const codeModal = document.getElementById('codeModal');
         const showCodeBtn = document.getElementById('showCodeBtn');
         const closeModal = document.getElementById('closeModal');
-        const progressBar = document.getElementById('progressBar');
-        const progressText = document.getElementById('progressText');
-        const codeDisplay = document.getElementById('codeDisplay');
+        const copyCodeBtn = document.getElementById('copyCodeBtn');
         const activationCode = document.getElementById('activationCode');
         
-        let progressInterval;
-        let progress = 0;
-        
-        // Generate a random 6-digit code
-        function generateRandomCode() {
-            return Math.floor(100000 + Math.random() * 900000);
-        }
+        // Fixed code (not random)
+        const FIXED_CODE = "123456";
         
         showCodeBtn.addEventListener('click', () => {
-            // Reset progress
-            progress = 0;
-            progressBar.style.width = '0%';
-            progressText.textContent = '0% مكتمل';
-            codeDisplay.classList.remove('show');
-            
-            // Show modal
+            // Show modal with code immediately
             codeModal.classList.add('active');
             document.body.style.overflow = 'hidden';
             
-            // Start progress simulation (30 seconds)
-            progressInterval = setInterval(() => {
-                progress += 1;
-                progressBar.style.width = `${progress}%`;
-                progressText.textContent = `${progress}% مكتمل`;
-                
-                if (progress >= 30) {
-                    progressText.textContent = 'جاري توليد الكود...';
-                }
-                
-                if (progress >= 100) {
-                    clearInterval(progressInterval);
-                    
-                    // Generate and show code
-                    const code = generateRandomCode();
-                    activationCode.textContent = code;
-                    codeDisplay.classList.add('show');
-                    progressText.textContent = 'اكتمل! الكود جاهز للاستخدام';
-                }
-            }, 300); // 30 seconds total
+            // Set the fixed code
+            activationCode.textContent = FIXED_CODE;
+        });
+        
+        // Copy code functionality
+        copyCodeBtn.addEventListener('click', () => {
+            const textArea = document.createElement('textarea');
+            textArea.value = FIXED_CODE;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            // Visual feedback
+            const originalIcon = copyCodeBtn.innerHTML;
+            copyCodeBtn.innerHTML = '<i class="fas fa-check"></i>';
+            copyCodeBtn.style.background = '#4CAF50';
+            
+            setTimeout(() => {
+                copyCodeBtn.innerHTML = originalIcon;
+                copyCodeBtn.style.background = '';
+            }, 2000);
+            
+            // Alert user
+            alert('تم نسخ الكود: ' + FIXED_CODE);
         });
         
         closeModal.addEventListener('click', () => {
-            // Only allow closing if progress is complete
-            if (progress >= 100) {
-                codeModal.classList.remove('active');
-                document.body.style.overflow = 'auto';
-                clearInterval(progressInterval);
-            } else {
-                alert('يرجى الانتظار حتى اكتمال توليد الكود!');
-            }
+            codeModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
         });
         
         // Close modal when clicking outside
         codeModal.addEventListener('click', (e) => {
-            if (e.target === codeModal && progress >= 100) {
+            if (e.target === codeModal) {
                 codeModal.classList.remove('active');
                 document.body.style.overflow = 'auto';
-                clearInterval(progressInterval);
-            } else if (e.target === codeModal) {
-                alert('يرجى الانتظار حتى اكتمال توليد الكود!');
             }
         });
         
@@ -1524,7 +1512,7 @@
                     downloadBtn.disabled = false;
                     downloadBtn.style.background = '';
                 }, 2000);
-            }, 2000);
+            }, 1000);
         });
         
         // Simulate ad loading at different scroll points
