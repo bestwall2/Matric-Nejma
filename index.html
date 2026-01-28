@@ -2,7 +2,195 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
+    
+    <!-- Anti-AdBlock Script - FuckAdBlock -->
+    <script>
+        // Anti-AdBlock Detection
+        (function() {
+            var FuckAdBlock = function(options) {
+                this._options = {
+                    checkOnLoad: true,
+                    resetOnEnd: true,
+                    loopCheckTime: 50,
+                    loopMaxNumber: 5,
+                    baitClass: 'pub_300x250 pub_300x250m pub_728x90 text-ad textAd text_ad text_ads text-ads text-ad-links',
+                    baitStyle: 'width: 1px !important; height: 1px !important; position: absolute !important; left: -10000px !important; top: -1000px !important;'
+                };
+                this._var = {
+                    version: '3.2.1',
+                    bait: null,
+                    checking: false,
+                    loop: null,
+                    loopNumber: 0,
+                    event: { detected: [], notDetected: [] }
+                };
+                if(options !== undefined) {
+                    this.setOption(options);
+                }
+                var self = this;
+                var eventCallback = function() {
+                    setTimeout(function() {
+                        if(self._options.checkOnLoad === true) {
+                            self.check();
+                        }
+                    }, 1);
+                };
+                if(window.addEventListener !== undefined) {
+                    window.addEventListener('load', eventCallback, false);
+                } else {
+                    window.attachEvent('onload', eventCallback);
+                }
+            };
+            FuckAdBlock.prototype._creatBait = function() {
+                var bait = document.createElement('div');
+                bait.setAttribute('class', this._options.baitClass);
+                bait.setAttribute('style', this._options.baitStyle);
+                this._var.bait = window.document.body.appendChild(bait);
+                this._var.bait.offsetParent;
+                this._var.bait.offsetHeight;
+                this._var.bait.offsetLeft;
+                this._var.bait.offsetTop;
+                this._var.bait.offsetWidth;
+                this._var.bait.clientHeight;
+                this._var.bait.clientWidth;
+            };
+            FuckAdBlock.prototype._destroyBait = function() {
+                window.document.body.removeChild(this._var.bait);
+                this._var.bait = null;
+            };
+            FuckAdBlock.prototype.check = function(loop) {
+                if(loop === undefined) {
+                    loop = true;
+                }
+                if(this._var.checking === true) {
+                    return false;
+                }
+                this._var.checking = true;
+                if(this._var.bait === null) {
+                    this._creatBait();
+                }
+                var self = this;
+                this._var.loopNumber = 0;
+                if(loop === true) {
+                    this._var.loop = setInterval(function() {
+                        self._checkBait(loop);
+                    }, this._options.loopCheckTime);
+                }
+                setTimeout(function() {
+                    self._checkBait(loop);
+                }, 1);
+            };
+            FuckAdBlock.prototype._checkBait = function(loop) {
+                var detected = false;
+                if(this._var.bait === null) {
+                    this._creatBait();
+                }
+                if(window.document.body.getAttribute('abp') !== null
+                || this._var.bait.offsetParent === null
+                || this._var.bait.offsetHeight == 0
+                || this._var.bait.offsetLeft == 0
+                || this._var.bait.offsetTop == 0
+                || this._var.bait.offsetWidth == 0
+                || this._var.bait.clientHeight == 0
+                || this._var.bait.clientWidth == 0) {
+                    detected = true;
+                }
+                if(window.getComputedStyle !== undefined) {
+                    var baitTemp = window.getComputedStyle(this._var.bait, null);
+                    if(baitTemp && (baitTemp.getPropertyValue('display') == 'none' || baitTemp.getPropertyValue('visibility') == 'hidden')) {
+                        detected = true;
+                    }
+                }
+                this._var.loopNumber++;
+                if(loop === true) {
+                    if(this._var.loopNumber >= this._options.loopMaxNumber) {
+                        this._stopLoop();
+                    }
+                }
+                if(detected === true) {
+                    this._stopLoop();
+                    this._destroyBait();
+                    this.emitEvent(true);
+                    if(loop === true) {
+                        this._var.checking = false;
+                    }
+                } else if(this._var.loop === null || loop === false) {
+                    this._destroyBait();
+                    this.emitEvent(false);
+                    if(loop === true) {
+                        this._var.checking = false;
+                    }
+                }
+            };
+            FuckAdBlock.prototype._stopLoop = function(detected) {
+                clearInterval(this._var.loop);
+                this._var.loop = null;
+                this._var.loopNumber = 0;
+            };
+            FuckAdBlock.prototype.emitEvent = function(detected) {
+                var fns = this._var.event[(detected===true?'detected':'notDetected')];
+                for(var i in fns) {
+                    if(fns.hasOwnProperty(i)) {
+                        fns[i]();
+                    }
+                }
+                if(this._options.resetOnEnd === true) {
+                    this.clearEvent();
+                }
+            };
+            FuckAdBlock.prototype.clearEvent = function() {
+                this._var.event.detected = [];
+                this._var.event.notDetected = [];
+            };
+            FuckAdBlock.prototype.on = function(detected, fn) {
+                this._var.event[(detected===true?'detected':'notDetected')].push(fn);
+                return this;
+            };
+            FuckAdBlock.prototype.onDetected = function(fn) {
+                return this.on(true, fn);
+            };
+            FuckAdBlock.prototype.onNotDetected = function(fn) {
+                return this.on(false, fn);
+            };
+            FuckAdBlock.prototype.setOption = function(options, value) {
+                if(value !== undefined) {
+                    var key = options;
+                    options = {};
+                    options[key] = value;
+                }
+                for(var option in options) {
+                    if(options.hasOwnProperty(option)) {
+                        this._options[option] = options[option];
+                    }
+                }
+                return this;
+            };
+            window.FuckAdBlock = FuckAdBlock;
+        })();
+
+        // Initialize AdBlock detection
+        var fuckAdBlock = new FuckAdBlock({
+            checkOnLoad: true,
+            resetOnEnd: true
+        });
+
+        fuckAdBlock.onDetected(function() {
+            // Show warning modal
+            setTimeout(function() {
+                if(confirm('⚠️ تم اكتشاف مانع الإعلانات!\n\nيرجى تعطيل مانع الإعلانات لدعم الموقع والاستمرار في استخدام الخدمة.\n\nهل تريد إعادة تحميل الصفحة بعد تعطيل المانع؟')) {
+                    location.reload();
+                }
+            }, 1000);
+        });
+
+        fuckAdBlock.onNotDetected(function() {
+            console.log('✅ No AdBlock detected - Thank you for supporting us!');
+        });
+    </script>
+    
+    <!-- Monetag Ads Script -->
     <script src="https://quge5.com/88/tag.min.js" data-zone="204806" async data-cfasync="false"></script>
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ماتريك نجمة</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -76,6 +264,12 @@
             align-items: center;
             gap: 1rem;
             flex-shrink: 0;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .logo-section:hover {
+            transform: scale(1.02);
         }
 
         .logo {
@@ -109,7 +303,7 @@
             opacity: 0.9;
             margin-top: 0.2rem;
             font-weight: 300;
-            display: none; /* مخفي على الهواتف */
+            display: none;
         }
 
         .theme-toggle {
@@ -134,13 +328,58 @@
             transform: rotate(45deg) scale(1.1);
         }
 
+        /* Countdown Timer Styles */
+        .countdown-container {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .countdown-container.show {
+            display: block;
+        }
+
+        .countdown-timer {
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin: 1.5rem 0;
+            animation: pulse 1s infinite;
+        }
+
+        .countdown-message {
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .countdown-icon {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .dark-mode .countdown-message {
+            color: var(--accent);
+        }
+
         /* Content Sections - Responsive */
         .content-section {
             padding: 2rem 0;
             max-width: 1400px;
             margin: 0 auto;
             padding: 0 1.5rem 2rem;
-            margin-top: 40px; /* تمت إضافة هذا السطر */
+            margin-top: 40px;
         }
 
         .content-card {
@@ -487,7 +726,7 @@
             border: 3px dashed var(--primary);
             border-radius: var(--radius);
             margin: 1.2rem 0;
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: center;
             gap: 1rem;
@@ -683,7 +922,7 @@
             visibility: visible;
         }
 
-        /* Tablet Styles - 768px and up */
+        /* Responsive Styles */
         @media screen and (min-width: 768px) {
             .header {
                 padding: 1.2rem 0;
@@ -715,7 +954,7 @@
             
             .content-section {
                 padding: 0 2rem 3rem;
-                margin-top: 50px; /* تعديل للتابلت */
+                margin-top: 50px;
             }
             
             .content-card {
@@ -817,7 +1056,6 @@
             }
         }
 
-        /* Desktop Styles - 1024px and up */
         @media screen and (min-width: 1024px) {
             .header-content {
                 padding: 0 3rem;
@@ -838,7 +1076,7 @@
             
             .content-section {
                 padding: 0 3rem 4rem;
-                margin-top: 60px; /* تعديل للديسكتوب */
+                margin-top: 60px;
             }
             
             .content-card {
@@ -927,7 +1165,6 @@
             }
         }
 
-        /* Large Desktop Styles - 1400px and up */
         @media screen and (min-width: 1400px) {
             .header-content,
             .content-section,
@@ -938,7 +1175,6 @@
             }
         }
 
-        /* Small Phone Styles - 480px and down */
         @media screen and (max-width: 480px) {
             .header-content {
                 padding: 0 1rem;
@@ -961,7 +1197,7 @@
             
             .content-section {
                 padding: 0 1rem 1.5rem;
-                margin-top: 30px; /* تعديل للهواتف الصغيرة */
+                margin-top: 30px;
             }
             
             .content-card {
@@ -1092,12 +1328,19 @@
                 letter-spacing: 1px;
             }
             
+            .countdown-timer {
+                font-size: 3rem;
+            }
+            
+            .countdown-icon {
+                font-size: 2rem;
+            }
+            
             .code-warning {
                 font-size: 0.9rem;
             }
         }
 
-        /* Landscape Orientation */
         @media screen and (max-height: 500px) and (orientation: landscape) {
             .header {
                 padding: 0.5rem 0;
@@ -1137,7 +1380,6 @@
             }
         }
 
-        /* Print Styles */
         @media print {
             .header,
             .theme-toggle,
@@ -1165,7 +1407,7 @@
     <!-- Header -->
     <header class="header">
         <div class="header-content">
-            <div class="logo-section">
+            <div class="logo-section" id="logoSection">
                 <img src="https://i.ibb.co/21M7Zp04/5c2681bd-90e4-44f3-8dfc-0a0127612bba.jpg" alt="Matric Nejma Logo" class="logo">
                 <div class="logo-text">
                     <h1 class="site-title">ماتريك نجمه</h1>
@@ -1210,7 +1452,7 @@
             <p class="content-text">البطولات ليست مجرد منافسات رياضية، بل هي قصص إنسانية مليئة بالدراما، الفرح، الخيبة، والبطولات الفردية والجماعية. كل مباراة تحمل في طياتها احتمالات لا نهائية، وكل هدف قد يغير مسار التاريخ، وكل بطولة تخلق أبطالاً جدداً يدخلون سجلات الخلود.</p>
         </div>
         
-        <!-- Article 7 - New Article -->
+        <!-- Article 7 -->
         <div class="content-card fade-in">
             <h2 class="content-title"><i class="fas fa-users"></i> كرة القدم النسائية: الثورة الصامتة</h2>
             <p class="content-text">شهدت كرة القدم النسائية نمواً هائلاً في العقدين الماضيين، حيث تحولت من رياضة هامشية إلى ظاهرة عالمية تجذب ملايين المشجعين. بدأت رحلة كرة القدم النسائية بصعوبات كبيرة، من منع ممارستها في بعض الدول إلى نقص التمويل والدعم، لكن إصرار اللاعبات غير مسار التاريخ.</p>
@@ -1331,16 +1573,29 @@
         <div class="modal">
             <button class="modal-close" id="closeModal"><i class="fas fa-times"></i></button>
             <h3 class="modal-title">كود التفعيل الأسبوعي</h3>
-            <p class="modal-text">تطبيق ماتريك نجمه يستخدم أكواد تفعيل أسبوعية تتغير كل أسبوع لحماية النظام. هذا هو كود التفعيل الحالي:</p>
             
-            <div class="code-display show">
-                <span id="activationCode">203030</span>
-                <button class="copy-btn" id="copyCodeBtn" title="نسخ الكود">
-                    <i class="fas fa-copy"></i>
-                </button>
+            <!-- Countdown Container -->
+            <div class="countdown-container" id="countdownContainer">
+                <div class="countdown-icon">
+                    <i class="fas fa-hourglass-half"></i>
+                </div>
+                <p class="countdown-message">يرجى الانتظار <span id="countdownSeconds">15</span> ثانية لتجهيز الكود...</p>
+                <div class="countdown-timer" id="countdownTimer">15</div>
             </div>
             
-            <p class="code-warning">⚠️ هذا الكود ساري لمدة أسبوع واحد فقط!</p>
+            <!-- Code Display (Hidden Initially) -->
+            <div id="codeContent" style="display: none;">
+                <p class="modal-text">تطبيق ماتريك نجمه يستخدم أكواد تفعيل أسبوعية تتغير كل أسبوع لحماية النظام. هذا هو كود التفعيل الحالي:</p>
+                
+                <div class="code-display show">
+                    <span id="activationCode">203030</span>
+                    <button class="copy-btn" id="copyCodeBtn" title="نسخ الكود">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+                
+                <p class="code-warning">⚠️ هذا الكود ساري لمدة أسبوع واحد فقط!</p>
+            </div>
         </div>
     </div>
 
@@ -1356,11 +1611,15 @@
     </div>
 
     <script>
+        // Configuration - Replace with your actual Monetag Direct Links
+        const MONETAG_DIRECT_LINK = 'https://otieu.com/4/10534480'; // Replace with your actual direct link
+        const FIXED_CODE = "203030";
+        const COUNTDOWN_SECONDS = 15;
+        
         // Theme Toggle
         const themeToggle = document.getElementById('themeToggle');
         const themeIcon = themeToggle.querySelector('i');
         
-        // Check saved theme or prefer-color-scheme
         const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
         const currentTheme = localStorage.getItem('theme');
         
@@ -1384,6 +1643,12 @@
             }
         });
         
+        // Logo Click - Opens Monetag Direct Link
+        const logoSection = document.getElementById('logoSection');
+        logoSection.addEventListener('click', () => {
+            window.open(MONETAG_DIRECT_LINK, '_blank');
+        });
+        
         // Scroll Animation
         const fadeElements = document.querySelectorAll('.fade-in');
         const scrollIndicator = document.getElementById('scrollIndicator');
@@ -1398,11 +1663,9 @@
                 }
             });
             
-            // Show scroll indicator until user has scrolled down enough
             const scrollPosition = window.scrollY;
             const documentHeight = document.documentElement.scrollHeight;
             
-            // Show indicator if user hasn't scrolled at least 80% of the page
             if (scrollPosition < documentHeight * 0.8) {
                 scrollIndicator.classList.add('show');
             } else {
@@ -1431,25 +1694,54 @@
             });
         });
         
-        // Code Modal
+        // Code Modal with Countdown Timer
         const codeModal = document.getElementById('codeModal');
         const showCodeBtn = document.getElementById('showCodeBtn');
         const closeModal = document.getElementById('closeModal');
         const copyCodeBtn = document.getElementById('copyCodeBtn');
         const activationCode = document.getElementById('activationCode');
+        const countdownContainer = document.getElementById('countdownContainer');
+        const codeContent = document.getElementById('codeContent');
+        const countdownTimer = document.getElementById('countdownTimer');
+        const countdownSeconds = document.getElementById('countdownSeconds');
         
-        // Fixed code (not random)
-        const FIXED_CODE = "203030";
+        let countdownInterval = null;
         
         showCodeBtn.addEventListener('click', () => {
-
-            window.open('https://otieu.com/4/10534480', '_blank');
-            // Show modal with code immediately
+            // Show modal immediately
             codeModal.classList.add('active');
             document.body.style.overflow = 'hidden';
             
-            // Set the fixed code
-            activationCode.textContent = FIXED_CODE;
+            // Reset display states
+            countdownContainer.style.display = 'block';
+            countdownContainer.classList.add('show');
+            codeContent.style.display = 'none';
+            
+            // Start countdown
+            let timeLeft = COUNTDOWN_SECONDS;
+            countdownTimer.textContent = timeLeft;
+            countdownSeconds.textContent = timeLeft;
+            
+            countdownInterval = setInterval(() => {
+                timeLeft--;
+                countdownTimer.textContent = timeLeft;
+                countdownSeconds.textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    
+                    // Open Monetag Direct Link in new tab
+                    window.open(MONETAG_DIRECT_LINK, '_blank');
+                    
+                    // Show the code after a short delay
+                    setTimeout(() => {
+                        countdownContainer.classList.remove('show');
+                        countdownContainer.style.display = 'none';
+                        codeContent.style.display = 'block';
+                        activationCode.textContent = FIXED_CODE;
+                    }, 500);
+                }
+            }, 1000);
         });
         
         // Copy code functionality
@@ -1458,24 +1750,32 @@
             textArea.value = FIXED_CODE;
             document.body.appendChild(textArea);
             textArea.select();
-            document.execCommand('copy');
+            
+            try {
+                document.execCommand('copy');
+                
+                // Visual feedback
+                const originalIcon = copyCodeBtn.innerHTML;
+                copyCodeBtn.innerHTML = '<i class="fas fa-check"></i>';
+                copyCodeBtn.style.background = '#4CAF50';
+                
+                setTimeout(() => {
+                    copyCodeBtn.innerHTML = originalIcon;
+                    copyCodeBtn.style.background = '';
+                }, 2000);
+                
+                alert('تم نسخ الكود: ' + FIXED_CODE);
+            } catch (err) {
+                alert('فشل نسخ الكود. يرجى نسخه يدوياً: ' + FIXED_CODE);
+            }
+            
             document.body.removeChild(textArea);
-            
-            // Visual feedback
-            const originalIcon = copyCodeBtn.innerHTML;
-            copyCodeBtn.innerHTML = '<i class="fas fa-check"></i>';
-            copyCodeBtn.style.background = '#4CAF50';
-            
-            setTimeout(() => {
-                copyCodeBtn.innerHTML = originalIcon;
-                copyCodeBtn.style.background = '';
-            }, 2000);
-            
-            // Alert user
-            alert('تم نسخ الكود: ' + FIXED_CODE);
         });
         
         closeModal.addEventListener('click', () => {
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
             codeModal.classList.remove('active');
             document.body.style.overflow = 'auto';
         });
@@ -1483,33 +1783,40 @@
         // Close modal when clicking outside
         codeModal.addEventListener('click', (e) => {
             if (e.target === codeModal) {
+                if (countdownInterval) {
+                    clearInterval(countdownInterval);
+                }
                 codeModal.classList.remove('active');
                 document.body.style.overflow = 'auto';
             }
         });
         
+        // Download Button with Monetag Integration
         const downloadBtn = document.getElementById('downloadBtn');
         
         downloadBtn.addEventListener('click', () => {
             // Show loading state
-            downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحميل...';
+            downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحضير...';
             downloadBtn.disabled = true;
             
-            // Open MediaFire link in new tab
-            window.open('https://www.mediafire.com/file/bpxjh4myixxrv0f/Matric+Nejma+6+V2.0-1.apk/file', '_blank');
+            // Open Monetag Direct Link first
+            window.open(MONETAG_DIRECT_LINK, '_blank');
             
-            // Reset button after a short delay
+            // Then open MediaFire download after a short delay
             setTimeout(() => {
+                window.open('https://www.mediafire.com/file/bpxjh4myixxrv0f/Matric+Nejma+6+V2.0-1.apk/file', '_blank');
+                
+                // Update button to success state
                 downloadBtn.innerHTML = '<i class="fas fa-check"></i> تم التحميل بنجاح';
                 downloadBtn.style.background = 'linear-gradient(135deg, #4CAF50, #388E3C)';
                 
-                // Optional: Reset button back to original state after a few seconds
+                // Reset button after a few seconds
                 setTimeout(() => {
-                    downloadBtn.innerHTML = '<i class="fas fa-download"></i> تحميل'; // Adjust to your original button text
-                    downloadBtn.style.background = ''; // Reset to original background
+                    downloadBtn.innerHTML = '<i class="fas fa-download"></i> تحميل التطبيق';
+                    downloadBtn.style.background = '';
                     downloadBtn.disabled = false;
                 }, 3000);
-            }, 500);
+            }, 1500);
         });
         
         // Touch event for mobile
