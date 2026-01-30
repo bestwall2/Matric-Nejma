@@ -195,30 +195,1278 @@
     <title>ماتريك نجمة</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* (styles unchanged for brevity in editor) */
+        :root {
+            --primary: #4A148C;
+            --primary-dark: #311B92;
+            --primary-light: #7C4DFF;
+            --secondary: #FF4081;
+            --accent: #00BCD4;
+            --light: #F5F5F5;
+            --dark: #121212;
+            --gray: #424242;
+            --light-gray: #E0E0E0;
+            --card-light: #FFFFFF;
+            --card-dark: #1A1A2E;
+            --radius: 20px;
+            --shadow: 0 15px 35px rgba(74, 20, 140, 0.15);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', 'Segoe UI', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f5f5 0%, #f0f2f5 100%);
+            color: #333;
+            transition: var(--transition);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            color: #f0f0f0;
+        }
+
+        /* Header - Responsive */
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(74, 20, 140, 0.25);
+            border-bottom-left-radius: var(--radius);
+            border-bottom-right-radius: var(--radius);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1.5rem;
+            gap: 1rem;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-shrink: 0;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .logo-section:hover {
+            transform: scale(1.02);
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: var(--transition);
+        }
+
+        .logo:hover {
+            transform: rotate(10deg) scale(1.05);
+        }
+
+        .logo-text {
+            flex: 1;
+        }
+
+        .site-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            letter-spacing: 0.5px;
+            line-height: 1.2;
+        }
+
+        .site-subtitle {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            margin-top: 0.2rem;
+            font-weight: 300;
+            display: none;
+        }
+
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            flex-shrink: 0;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: rotate(45deg) scale(1.1);
+        }
+
+        /* Countdown Timer Styles */
+        .countdown-container {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .countdown-container.show {
+            display: block;
+        }
+
+        .countdown-timer {
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin: 1.5rem 0;
+            animation: pulse 1s infinite;
+        }
+
+        .countdown-message {
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .countdown-icon {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .dark-mode .countdown-message {
+            color: var(--accent);
+        }
+
+        /* Content Sections - Responsive */
+        .content-section {
+            padding: 2rem 0;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1.5rem 2rem;
+            margin-top: 40px;
+        }
+
+        .content-card {
+            background: var(--card-light);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--primary);
+            transition: var(--transition);
+        }
+
+        .dark-mode .content-card {
+            background: var(--card-dark);
+        }
+
+        .content-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(74, 20, 140, 0.2);
+        }
+
+        .content-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            line-height: 1.3;
+        }
+
+        .content-title i {
+            color: var(--secondary);
+            font-size: 1.3rem;
+        }
+
+        .content-text {
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 1.2rem;
+            text-align: justify;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(74, 20, 140, 0.1), rgba(255, 64, 129, 0.1));
+            border-right: 4px solid var(--primary);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            margin: 1.5rem 0;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .dark-mode .highlight-box {
+            background: linear-gradient(135deg, rgba(74, 20, 140, 0.2), rgba(255, 64, 129, 0.2));
+        }
+
+        /* App Info Section - Responsive */
+        .app-info-section {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: white;
+            padding: 3rem 0;
+            border-radius: var(--radius);
+            margin: 2rem 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-info-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            transform: translate(30%, -30%);
+        }
+
+        .app-info-section::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 250px;
+            height: 250px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            transform: translate(-30%, 30%);
+        }
+
+        .app-info-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .app-info-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .app-info-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+        }
+
+        .app-info-item:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .app-info-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .app-info-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.3;
+        }
+
+        .app-info-text {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        /* Action Buttons Section - Responsive */
+        .action-section {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border-radius: var(--radius);
+            padding: 3rem 1.5rem;
+            margin: 3rem auto;
+            max-width: 1200px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 64, 129, 0.1) 0%, transparent 70%);
+            z-index: 0;
+        }
+
+        .action-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .action-title {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.3;
+        }
+
+        .action-text {
+            font-size: 1rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            line-height: 1.7;
+            opacity: 0.9;
+        }
+
+        .buttons-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .action-btn {
+            padding: 1.2rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            width: 100%;
+            max-width: 300px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.2));
+            z-index: -1;
+            transition: var(--transition);
+            opacity: 0;
+        }
+
+        .action-btn:hover::before {
+            opacity: 1;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, var(--secondary), #E91E63);
+            color: white;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 10px 25px rgba(255, 64, 129, 0.4);
+        }
+
+        .code-btn {
+            background: linear-gradient(135deg, var(--accent), #0097A7);
+            color: white;
+        }
+
+        .code-btn:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 10px 25px rgba(0, 188, 212, 0.4);
+        }
+
+        /* Progress Modal - Responsive */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--card-light);
+            width: 100%;
+            max-width: 500px;
+            border-radius: var(--radius);
+            padding: 2rem;
+            text-align: center;
+            transform: translateY(50px) scale(0.95);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            border: 1px solid rgba(74, 20, 140, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .dark-mode .modal {
+            background: var(--card-dark);
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(74, 20, 140, 0.1);
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            font-size: 1.1rem;
+            color: var(--primary);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: var(--primary);
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            line-height: 1.3;
+        }
+
+        .modal-text {
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .code-display {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            padding: 1rem;
+            border: 3px dashed var(--primary);
+            border-radius: var(--radius);
+            margin: 1.2rem 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            letter-spacing: 2px;
+            word-break: break-all;
+        }
+
+        .code-display.show {
+            display: flex;
+            animation: pulse 2s infinite;
+        }
+
+        .copy-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1.2rem;
+        }
+
+        .copy-btn:hover {
+            background: var(--secondary);
+            transform: scale(1.1);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 5px 15px rgba(74, 20, 140, 0.2); }
+            50% { transform: scale(1.02); box-shadow: 0 8px 25px rgba(74, 20, 140, 0.3); }
+            100% { transform: scale(1); box-shadow: 0 5px 15px rgba(74, 20, 140, 0.2); }
+        }
+
+        .code-warning {
+            color: var(--secondary);
+            font-weight: bold;
+            margin-top: 1rem;
+            font-size: 0.95rem;
+        }
+
+        /* Footer - Responsive */
+        .footer {
+            background: linear-gradient(135deg, #0f0c29, #302b63);
+            color: #eee;
+            padding: 3rem 0 1.5rem;
+            margin-top: 4rem;
+            border-top-left-radius: var(--radius);
+            border-top-right-radius: var(--radius);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255, 64, 129, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .footer-logo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-logo img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .footer-title {
+            font-size: 1.6rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent), white);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .footer-text {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #aaa;
+            font-size: 0.85rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Scroll Animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Back to Top Button - Responsive */
+        .back-to-top {
+            position: fixed;
+            bottom: 1.5rem;
+            left: 1.5rem;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            z-index: 100;
+            box-shadow: 0 5px 15px rgba(74, 20, 140, 0.3);
+            border: none;
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 10px 25px rgba(74, 20, 140, 0.4);
+        }
+
+        /* Scroll Indicator - Responsive */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 100px;
+            right: 50%;
+            transform: translateX(50%);
+            background: rgba(74, 20, 140, 0.85);
+            color: white;
+            padding: 0.8rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            z-index: 99;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            max-width: 90%;
+            text-align: center;
+        }
+
+        .scroll-indicator.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Responsive Styles */
+        @media screen and (min-width: 768px) {
+            .header {
+                padding: 1.2rem 0;
+            }
+            
+            .header-content {
+                padding: 0 2rem;
+            }
+            
+            .logo {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .site-title {
+                font-size: 1.8rem;
+            }
+            
+            .site-subtitle {
+                display: block;
+                font-size: 0.9rem;
+            }
+            
+            .theme-toggle {
+                width: 50px;
+                height: 50px;
+                font-size: 1.3rem;
+            }
+            
+            .content-section {
+                padding: 0 2rem 3rem;
+                margin-top: 50px;
+            }
+            
+            .content-card {
+                padding: 2rem;
+                margin-bottom: 2.5rem;
+            }
+            
+            .content-title {
+                font-size: 1.8rem;
+            }
+            
+            .content-text {
+                font-size: 1.05rem;
+            }
+            
+            .app-info-section {
+                padding: 4rem 0;
+                margin: 3rem 1.5rem;
+            }
+            
+            .app-info-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+            }
+            
+            .app-info-item {
+                padding: 2rem;
+            }
+            
+            .app-info-title {
+                font-size: 1.4rem;
+            }
+            
+            .app-info-text {
+                font-size: 1rem;
+            }
+            
+            .action-section {
+                padding: 4rem 2rem;
+                margin: 4rem auto;
+            }
+            
+            .action-title {
+                font-size: 2.2rem;
+            }
+            
+            .action-text {
+                font-size: 1.1rem;
+            }
+            
+            .buttons-container {
+                flex-direction: row;
+                gap: 2rem;
+            }
+            
+            .action-btn {
+                width: auto;
+                min-width: 250px;
+            }
+            
+            .footer {
+                padding: 4rem 0 2rem;
+            }
+            
+            .footer-logo {
+                flex-direction: row;
+                justify-content: center;
+                text-align: right;
+            }
+            
+            .footer-logo img {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .footer-title {
+                font-size: 1.8rem;
+            }
+            
+            .footer-text {
+                font-size: 1.05rem;
+            }
+            
+            .scroll-indicator {
+                font-size: 1rem;
+                padding: 1rem 1.5rem;
+            }
+            
+            .modal {
+                padding: 2.5rem;
+            }
+            
+            .modal-title {
+                font-size: 1.8rem;
+            }
+            
+            .code-display {
+                font-size: 2.8rem;
+            }
+        }
+
+        @media screen and (min-width: 1024px) {
+            .header-content {
+                padding: 0 3rem;
+            }
+            
+            .logo {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .site-title {
+                font-size: 2.2rem;
+            }
+            
+            .site-subtitle {
+                font-size: 1rem;
+            }
+            
+            .content-section {
+                padding: 0 3rem 4rem;
+                margin-top: 60px;
+            }
+            
+            .content-card {
+                padding: 3rem;
+                margin-bottom: 3rem;
+            }
+            
+            .content-title {
+                font-size: 2.2rem;
+            }
+            
+            .content-text {
+                font-size: 1.2rem;
+            }
+            
+            .highlight-box {
+                padding: 2rem;
+                font-size: 1.1rem;
+            }
+            
+            .app-info-section {
+                padding: 5rem 0;
+                margin: 3rem 2rem;
+            }
+            
+            .app-info-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 2.5rem;
+            }
+            
+            .app-info-container {
+                padding: 0 3rem;
+            }
+            
+            .action-section {
+                padding: 6rem 3rem;
+                margin: 5rem auto;
+            }
+            
+            .action-title {
+                font-size: 3rem;
+            }
+            
+            .action-text {
+                font-size: 1.3rem;
+            }
+            
+            .action-btn {
+                padding: 1.5rem 3.5rem;
+                font-size: 1.3rem;
+                min-width: 280px;
+            }
+            
+            .footer-content {
+                padding: 0 3rem;
+            }
+            
+            .footer-text {
+                font-size: 1.1rem;
+            }
+            
+            .back-to-top {
+                bottom: 2.5rem;
+                left: 2.5rem;
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+            
+            .scroll-indicator {
+                bottom: 100px;
+                padding: 1rem 2rem;
+                font-size: 1.1rem;
+            }
+            
+            .modal {
+                padding: 3rem;
+            }
+            
+            .modal-title {
+                font-size: 2rem;
+            }
+            
+            .code-display {
+                font-size: 3rem;
+            }
+        }
+
+        @media screen and (min-width: 1400px) {
+            .header-content,
+            .content-section,
+            .app-info-container,
+            .footer-content {
+                max-width: 1400px;
+                margin: 0 auto;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .header-content {
+                padding: 0 1rem;
+            }
+            
+            .logo {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .site-title {
+                font-size: 1.3rem;
+            }
+            
+            .theme-toggle {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1rem;
+            }
+            
+            .content-section {
+                padding: 0 1rem 1.5rem;
+                margin-top: 30px;
+            }
+            
+            .content-card {
+                padding: 1.2rem;
+                border-left: 4px solid var(--primary);
+            }
+            
+            .content-title {
+                font-size: 1.3rem;
+                gap: 0.5rem;
+            }
+            
+            .content-title i {
+                font-size: 1.1rem;
+            }
+            
+            .content-text {
+                font-size: 0.95rem;
+                line-height: 1.6;
+            }
+            
+            .highlight-box {
+                padding: 1.2rem;
+                margin: 1.2rem 0;
+                font-size: 0.95rem;
+            }
+            
+            .app-info-section {
+                padding: 2.5rem 0;
+                margin: 2rem 0.5rem;
+            }
+            
+            .app-info-container {
+                padding: 0 1rem;
+            }
+            
+            .app-info-item {
+                padding: 1.2rem;
+            }
+            
+            .app-info-icon {
+                font-size: 1.8rem;
+            }
+            
+            .app-info-title {
+                font-size: 1.2rem;
+            }
+            
+            .app-info-text {
+                font-size: 0.9rem;
+            }
+            
+            .action-section {
+                padding: 2.5rem 1rem;
+                margin: 2.5rem 0.5rem;
+            }
+            
+            .action-title {
+                font-size: 1.5rem;
+            }
+            
+            .action-text {
+                font-size: 0.95rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .action-btn {
+                padding: 1rem 1.5rem;
+                font-size: 1rem;
+                max-width: 100%;
+            }
+            
+            .footer {
+                padding: 2.5rem 0 1.5rem;
+                margin-top: 3rem;
+            }
+            
+            .footer-content {
+                padding: 0 1rem;
+            }
+            
+            .footer-logo img {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .footer-title {
+                font-size: 1.4rem;
+            }
+            
+            .footer-text {
+                font-size: 0.9rem;
+            }
+            
+            .back-to-top {
+                bottom: 1rem;
+                left: 1rem;
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
+            }
+            
+            .scroll-indicator {
+                font-size: 0.8rem;
+                padding: 0.7rem 1rem;
+                max-width: 95%;
+            }
+            
+            .scroll-indicator i {
+                font-size: 0.9rem;
+            }
+            
+            .modal {
+                padding: 1.5rem;
+            }
+            
+            .modal-title {
+                font-size: 1.3rem;
+            }
+            
+            .modal-text {
+                font-size: 0.9rem;
+            }
+            
+            .code-display {
+                font-size: 1.8rem;
+                padding: 0.8rem;
+                letter-spacing: 1px;
+            }
+            
+            .countdown-timer {
+                font-size: 3rem;
+            }
+            
+            .countdown-icon {
+                font-size: 2rem;
+            }
+            
+            .code-warning {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media screen and (max-height: 500px) and (orientation: landscape) {
+            .header {
+                padding: 0.5rem 0;
+            }
+            
+            .logo {
+                width: 45px;
+                height: 45px;
+            }
+            
+            .site-title {
+                font-size: 1.2rem;
+            }
+            
+            .site-subtitle {
+                display: none;
+            }
+            
+            .theme-toggle {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+            
+            .back-to-top {
+                bottom: 0.8rem;
+                left: 0.8rem;
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+            
+            .scroll-indicator {
+                bottom: 60px;
+                padding: 0.5rem 0.8rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media print {
+            .header,
+            .theme-toggle,
+            .action-section,
+            .back-to-top,
+            .scroll-indicator,
+            .modal-overlay {
+                display: none !important;
+            }
+            
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            
+            .content-card,
+            .app-info-item {
+                box-shadow: none !important;
+                border: 1px solid #ddd !important;
+            }
+        }
     </style>
 </head>
 <body>
     <!-- Header -->
     <header class="header">
         <div class="header-content">
-            <!-- Logo wrapped with direct link -->
-            <a id="logoLink" class="logo-section" href="https://otieu.com/4/10534480" target="_blank" rel="noopener">
+            <div class="logo-section" id="logoSection">
                 <img src="https://i.ibb.co/21M7Zp04/5c2681bd-90e4-44f3-8dfc-0a0127612bba.jpg" alt="Matric Nejma Logo" class="logo">
                 <div class="logo-text">
                     <h1 class="site-title">ماتريك نجمه</h1>
                     <p class="site-subtitle">تطور عالم كرة القدم بشكل غير مسبوق</p>
                 </div>
-            </a>
+            </div>
             <button class="theme-toggle" id="themeToggle" aria-label="تبديل السمة">
                 <i class="fas fa-moon"></i>
             </button>
         </div>
     </header>
 
->
-        <!-- (articles unchanged) -->
-                <!-- Articles 3-6 -->
+    <!-- Content Sections -->
+    <div class="content-section">
+        <!-- Article 1 -->
+        <div class="content-card fade-in">
+            <h2 class="content-title"><i class="fas fa-futbol"></i> عالم كرة القدم: الشغف الذي يوحد الشعوب</h2>
+            <p class="content-text">كرة القدم ليست مجرد لعبة، إنها لغة عالمية تتحدث بها الشعوب وتتواصل من خلالها الثقافات. منذ بداياتها المتواضعة في القرن التاسع عشر في إنجلترا، تطورت كرة القدم لتصبح الرياضة الأكثر شعبية في العالم، بمتابعة تصل إلى أكثر من 4 مليارات مشجع حول الكرة الأرضية.</p>
+            
+            <div class="highlight-box">
+                <p>ما يميز كرة القدم هو قدرتها على خلق لحظات تاريخية تبقى في ذاكرة الأجيال. من أهداف بيليه الأسطورية في كأس العالم 1970، إلى يد الله لمارادونا في 1986، وصولاً إلى عروض ميسي ورونالدو الاستثنائية في العقدين الماضيين. هذه اللحظات ليست مجرد أحداث رياضية، بل أصبحت جزءاً من التراث الثقافي الإنساني.</p>
+            </div>
+            
+            <p class="content-text">تطورت كرة القدم تقنياً وتكتيكياً بشكل مذهل. من أنظمة اللعب البسيطة في بداياتها إلى التكتيكات المعقدة اليوم مثل الجيجين بريس والتيكي تاكا. كما أدخلت التكنولوجيا تغييرات جذرية في اللعبة، من تقنية خط المرمى إلى حكم الفيديو المساعد (VAR)، مما جعل القرارات التحكيمية أكثر دقة وعدالة.</p>
+            
+            <p class="content-text">لكن جوهر كرة القدم يبقى نفسه: 22 لاعباً، كرة واحدة، وشغف الملايين. هذه البساطة هي سر جاذبيتها وقدرتها على تجاوز الحدود الجغرافية والسياسية والثقافية. في الملعب، تختفي الفروقات وتصبح المهارة والإرادة هي المعيار الوحيد.</p>
+        </div>
+        
+        <!-- Article 2 -->
+        <div class="content-card fade-in">
+            <h2 class="content-title"><i class="fas fa-trophy"></i> البطولات الكبرى: مسرح الأساطير</h2>
+            <p class="content-text">تشكل البطولات الكبرى ذروة المنافسة في عالم كرة القدم. كأس العالم، بطولة الأمم الأوروبية، كوبا أمريكا، دوري أبطال أوروبا، والدوريات المحلية الكبرى - كلها أحداث تنتظرها جماهير كرة القدم بفارغ الصبر.</p>
+            
+            <p class="content-text">تتميز كل بطولة بطابعها الخاص وجوها الفريد. كأس العالم هو الحدث الرياضي الأضخم على الإطلاق، يجمع أفضل المنتخبات من جميع القارات. دوري أبطال أوروبا هو قمة المنافسة بين الأندية، حيث تلتقي مدارس كرة القدم المختلفة في صراع تقني وتكتيكي رفيع المستوى.</p>
+            
+            <div class="highlight-box">
+                <p>البطولات المحلية أيضاً لها سحرها الخاص. الدوري الإنجليزي الممتاز بسرعة إيقاعه وشراسته، الليجا الإسبانية بفنانيها وتكتيكاتها المتطورة، السيريا أ الإيطالية بتفوقها الدفاعي، والدوري الألماني بحماس جماهيره وتنظيمه المتميز. كل دورية تقدم نموذجاً مختلفاً لكرة القدم الجميلة.</p>
+            </div>
+            
+            <p class="content-text">في العالم العربي، تشهد الدوريات تطوراً ملحوظاً. الدوري المغربي يبرز بقوة في السنوات الأخيرة، والدوري السعودي يجذب نجوم العالم، والدوري المصري يتمتع بتاريخ غني وشعبية جارفة. هذه التطورات تعكس النمو الكبير لكرة القدم العربية على المستوى القاري والعالمي.</p>
+            
+            <p class="content-text">البطولات ليست مجرد منافسات رياضية، بل هي قصص إنسانية مليئة بالدراما، الفرح، الخيبة، والبطولات الفردية والجماعية. كل مباراة تحمل في طياتها احتمالات لا نهائية، وكل هدف قد يغير مسار التاريخ، وكل بطولة تخلق أبطالاً جدداً يدخلون سجلات الخلود.</p>
+        </div>
+        
+        <!-- Article 7 -->
+        <div class="content-card fade-in">
+            <h2 class="content-title"><i class="fas fa-users"></i> كرة القدم النسائية: الثورة الصامتة</h2>
+            <p class="content-text">شهدت كرة القدم النسائية نمواً هائلاً في العقدين الماضيين، حيث تحولت من رياضة هامشية إلى ظاهرة عالمية تجذب ملايين المشجعين. بدأت رحلة كرة القدم النسائية بصعوبات كبيرة، من منع ممارستها في بعض الدول إلى نقص التمويل والدعم، لكن إصرار اللاعبات غير مسار التاريخ.</p>
+            
+            <div class="highlight-box">
+                <p>كأس العالم للسيدات 2023 كان نقطة تحول فارقة، حيث حققت البطولة أرقاماً قياسية في الحضور الجماهيري والمشاهدات التلفزيونية. المنتخبات النسائية مثل الولايات المتحدة، إنجلترا، إسبانيا، وألمانيا قدمت مستويات تقنية مذهلة غيرت الصورة النمطية عن كرة القدم النسائية.</p>
+            </div>
+            
+            <p class="content-text">عربياً، تشهد كرة القدم النسائية تطوراً ملحوظاً. المغرب كان أول منتخب عربي يصل إلى دور الـ16 في كأس العالم للسيدات 2023، بينما استضافت السعودية أول بطولة رسمية للدوري النسائي في 2022. هذه الخطوات تعكس تغييراً جذرياً في نظرة المجتمعات العربية للرياضة النسائية.</p>
+            
+            <p class="content-text">التحديات ما تزال موجودة، لكن المستقبل يبدو مشرقاً لكرة القدم النسائية. زيادة الاستثمار، تحسين البنية التحتية، والتغطية الإعلامية الأفضل كلها عوامل تساهم في خلق جيل جديد من النجمات العربيات والعالميات اللاتي يقدمن كرة قدم راقية تلهم ملايين الفتيات حول العالم.</p>
+        </div>
+       
+        <!-- Articles 3-6 -->
         <div class="content-card fade-in">
             <h2 class="content-title"><i class="fas fa-history"></i> تطور كرة القدم العربية</h2>
             <p class="content-text">شهدت كرة القدم العربية تطوراً ملحوظاً في العقود الأخيرة، رغم التحديات الكبيرة التي واجهتها. من المستوى المتواضع في الستينيات والسبعينيات، إلى المنافسة القوية في الساحات القارية والعالمية اليوم.</p>
@@ -280,7 +1528,6 @@
         </div>
     </div>
 
-
     <!-- Action Buttons Section -->
     <section class="action-section fade-in">
         <div class="action-content">
@@ -289,23 +1536,14 @@
             <p class="action-text">الكود يتغير أسبوعياً، لذا ستحتاج للحصول على كود جديد كل أسبوع لتفعيل التطبيق والاستمرار في الاستخدام.</p>
             
             <div class="buttons-container">
-                <!-- Download as anchor linking directly to Monetag then MediaFire (JS still handles extra behavior) -->
-                <a id="downloadBtn" class="action-btn download-btn" href="https://otieu.com/4/10534480" target="_blank" rel="noopener">
+                <button class="action-btn download-btn" id="downloadBtn">
                     <i class="fas fa-download"></i>
                     تحميل التطبيق
-                </a>
-
-                <!-- Keep modal behavior for code, but add a visible direct link next to it -->
-                <div style="display:flex;gap:10px;align-items:center;">
-                    <button class="action-btn code-btn" id="showCodeBtn">
-                        <i class="fas fa-key"></i>
-                        الحصول على كود التفعيل
-                    </button>
-                    <a class="action-btn" id="directCodeLink" href="https://otieu.com/4/10534480" target="_blank" rel="noopener" style="max-width:160px; padding:0.9rem 1rem; text-decoration:none;">
-                        <i class="fas fa-link"></i>
-                        رابط مباشر
-                    </a>
-                </div>
+                </button>
+                <button class="action-btn code-btn" id="showCodeBtn">
+                    <i class="fas fa-key"></i>
+                    الحصول على كود التفعيل
+                </button>
             </div>
         </div>
     </section>
@@ -314,9 +1552,7 @@
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-logo">
-                <a href="https://otieu.com/4/10534480" target="_blank" rel="noopener">
-                    <img src="https://i.ibb.co/21M7Zp04/5c2681bd-90e4-44f3-8dfc-0a0127612bba.jpg" alt="Matric Nejma Logo">
-                </a>
+                <img src="https://i.ibb.co/21M7Zp04/5c2681bd-90e4-44f3-8dfc-0a0127612bba.jpg" alt="Matric Nejma Logo">
                 <div>
                     <h3 class="footer-title">ماتريك نجمه</h3>
                     <p>إمكانية الإستمتاع وإستخدام التطبيق بباقة نجمة ستة فقط</p>
@@ -325,9 +1561,6 @@
             
             <p class="footer-text">تطبيق ماتريك نجمه يوفر خدمة جيدة لكل من يمتلك باقة نجمة 6 . الكود يتغير أسبوعياً ويجب الحصول على كود جديد للتفعيل.</p>
             <p class="footer-text">حمل التطبيق، استخدم الكود، واستمتع .</p>
-
-            <!-- Extra visible direct link in footer -->
-            <p style="margin-top:1rem;"><a href="https://otieu.com/4/10534480" target="_blank" rel="noopener">اضغط هنا للحصول على المزيد / رابط مباشر</a></p>
         </div>
         
         <div class="copyright">
@@ -355,17 +1588,13 @@
                 <p class="modal-text">تطبيق ماتريك نجمه يستخدم أكواد تفعيل أسبوعية تتغير كل أسبوع لحماية النظام. هذا هو كود التفعيل الحالي:</p>
                 
                 <div class="code-display show">
-                    <!-- Activation code is clickable and links to direct Monetag URL -->
-                    <a id="activationLink" href="https://otieu.com/4/10534480" target="_blank" rel="noopener" style="text-decoration:none; color:inherit;">
-                        <span id="activationCode">203030</span>
-                    </a>
+                    <span id="activationCode">203030</span>
                     <button class="copy-btn" id="copyCodeBtn" title="نسخ الكود">
                         <i class="fas fa-copy"></i>
                     </button>
                 </div>
                 
                 <p class="code-warning">⚠️ هذا الكود ساري لمدة أسبوع واحد فقط!</p>
-                <p style="margin-top:0.6rem;"><a href="https://otieu.com/4/10534480" target="_blank" rel="noopener">فتح الرابط المباشر للحصول على المزيد</a></p>
             </div>
         </div>
     </div>
@@ -414,18 +1643,10 @@
             }
         });
         
-        // Update any dynamic hrefs (if you later change MONETAG_DIRECT_LINK)
-        document.addEventListener('DOMContentLoaded', () => {
-            try {
-                // set anchors that should point to monetag
-                const anchors = ['logoLink','downloadBtn','directCodeLink','activationLink'];
-                anchors.forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el) el.href = MONETAG_DIRECT_LINK;
-                });
-            } catch (e) {
-                console.warn('Failed to set dynamic direct links', e);
-            }
+        // Logo Click - Opens Monetag Direct Link
+        const logoSection = document.getElementById('logoSection');
+        logoSection.addEventListener('click', () => {
+            window.open(MONETAG_DIRECT_LINK, '_blank');
         });
         
         // Scroll Animation
@@ -573,15 +1794,11 @@
         // Download Button with Monetag Integration
         const downloadBtn = document.getElementById('downloadBtn');
         
-        downloadBtn.addEventListener('click', (e) => {
-            // If this is an anchor, let it open in a new tab normally but still run the extra behavior
-            try { if (e) e.preventDefault(); } catch(e){}
-
+        downloadBtn.addEventListener('click', () => {
             // Show loading state
             downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحضير...';
-            downloadBtn.classList.add('disabled');
-            downloadBtn.style.pointerEvents = 'none';
-
+            downloadBtn.disabled = true;
+            
             // Open Monetag Direct Link first
             window.open(MONETAG_DIRECT_LINK, '_blank');
             
@@ -597,8 +1814,7 @@
                 setTimeout(() => {
                     downloadBtn.innerHTML = '<i class="fas fa-download"></i> تحميل التطبيق';
                     downloadBtn.style.background = '';
-                    downloadBtn.classList.remove('disabled');
-                    downloadBtn.style.pointerEvents = '';
+                    downloadBtn.disabled = false;
                 }, 3000);
             }, 1500);
         });
